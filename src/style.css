@@ -1,0 +1,275 @@
+:global(html), :global(body), :global(#app) {
+  height: 100%;
+  overflow: hidden;
+}
+
+:global(body) {
+  margin: 0;
+  padding: 0;
+
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+
+  line-height: normal;
+}
+
+:global(.undefined) {
+  /* Hightlights missing css property */
+  background-color: red !important;
+  margin: -2px;
+  padding: 2px;
+}
+
+.interactive {
+  & input {
+    display: none;
+  }
+}
+
+.root {
+  margin: 0;
+  background-color: #fff;
+  color: #222;
+
+  display: flex;
+
+  height: 100%;
+}
+
+.toc {
+  min-width: 350px;
+  max-width: 350px;
+
+  height: 100%;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.content {
+  height: 100%;
+
+  overflow: auto;
+
+  flex: 1;
+}
+
+.service {
+  &__header {
+    display: flex;
+    border-bottom: 1px solid #eee;
+
+    &__toggle {
+      font-weight: bold;
+      text-transform: uppercase;
+
+      display: block;
+
+      padding: 14px;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      flex: 1;
+    }
+  }
+
+  &__version {
+    &s {
+      display: flex;
+      padding: 0 8px;
+    }
+
+    & {
+      display: block;
+      width: 50px;
+
+      text-align: center;
+
+      padding: 14px 0;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      flex: 1;
+
+      &--selected {
+        box-shadow: inset 0 -3px #eee;
+      }
+
+      &:hover {
+        box-shadow: inset 0 -3px blue;
+      }
+    }
+  }
+
+  &__content {
+    border-bottom: 1px solid #eee;
+
+    &--hidden {
+      display: none;
+    }
+  }
+}
+
+.entity {
+  margin: 10px 0;
+
+  &__header {
+    text-transform: capitalize;
+    font-weight: normal;
+
+    & a {
+      display: block;
+
+      padding: 8px 14px;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+
+  &__content {
+    font-size: 11px;
+  }
+}
+
+.controller {
+  font-size: inherit;
+  font-weight: lighter;
+
+  white-space: nowrap;
+
+  & a {
+    display: block;
+
+    padding: 8px 14px;
+
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__method {
+    display: inline-block;
+    width: 58px;
+
+    text-transform: uppercase;
+
+    &--get {
+      color: green;
+    }
+
+    &--post {
+      color: blue;
+    }
+
+    &--delete {
+      color: red;
+    }
+
+    &--put {
+      color: purple;
+    }
+  }
+
+  &:hover {
+    background-color: color(black a(10%));
+    cursor: pointer;
+  }
+}
+
+.chapter {
+  &__header {
+    padding: 50px 8%;
+
+    &__entity {
+      display: inline-block;
+
+      text-transform: capitalize;
+
+      font-size: 32px;
+    }
+
+    &__version {
+      display: inline-block;
+
+      margin: 0 10px 0 0;
+      padding: 3px 5px;
+
+      font-size: 16px;
+
+      color: white;
+      background-color: lightgray;
+
+      border-radius: 3px;
+
+      vertical-align: super;
+    }
+  }
+}
+
+.endpoint {
+  &__header {
+    background-color: #f9fafc;
+    border: solid #eee;
+    border-width: 1px 0;
+  }
+
+  &__controller {
+    font-size: 25px;
+    padding: 20px 8%;
+
+    & a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    &__method {
+      text-transform: uppercase;
+
+      &:after {
+        content: '\00a0';
+      }
+
+      &--get {
+        color: green;
+      }
+
+      &--post {
+        color: blue;
+      }
+
+      &--delete {
+        color: red;
+      }
+
+      &--put {
+        color: purple;
+      }
+    }
+  }
+
+  &__description {
+    padding: 20px 8%;
+  }
+
+  &__definition {
+    padding: 20px 8%;
+  }
+}
