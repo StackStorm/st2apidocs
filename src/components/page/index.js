@@ -54,11 +54,15 @@ export default class Page extends BaseComponent {
 
   componentDidMount() {
     const { hash } = this.props;
+
     this.hashes[hash].scrollIntoView();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { hash } = this.props;
+
+    if (hash === prevProps.hash) { return; }
+
     this.hashes[hash].scrollIntoView();
   }
 }
