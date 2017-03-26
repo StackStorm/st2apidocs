@@ -9,7 +9,7 @@ import Endpoint from '../endpoint';
 import style from './style.css';
 
 
-export default class Chapter extends BaseComponent {
+export default class Page extends BaseComponent {
   hashes = []
 
   renderChild({ model, method, action }) {
@@ -35,11 +35,11 @@ export default class Chapter extends BaseComponent {
     return (
       <div>
         <header
-          className={style.chapter.header}
+          className={style.page.header}
           ref={(c) => { this.hashes[''] = c; }}
         >
-          <span className={style.chapter.header.version}>{ version }</span>
-          <span className={style.chapter.header.entity}>{ entity || '/' }</span>
+          <span className={style.page.header.version}>{ version }</span>
+          <span className={style.page.header.entity}>{ entity || '/' }</span>
         </header>
         {
           _.map(model, (methods, action) =>

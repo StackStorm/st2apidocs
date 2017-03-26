@@ -11,7 +11,7 @@ import yaml from 'js-yaml';
 
 import { BaseComponent } from './components/base';
 
-import Chapter from './components/chapter';
+import Page from './components/page';
 import Service from './components/service';
 
 import style from './style.css';
@@ -43,7 +43,7 @@ class ApiDocs extends BaseComponent {
     await this.setState({ tree });
   }
 
-  matchChapter({ match, location }) {
+  matchPage({ match, location }) {
     if (!this.state.tree) {
       return null;
     }
@@ -59,7 +59,7 @@ class ApiDocs extends BaseComponent {
       model: this.state.tree[service][version][entity || '']
     };
 
-    return <Chapter {...props} />;
+    return <Page {...props} />;
   }
 
   renderService({ model, service }) {
@@ -84,7 +84,7 @@ class ApiDocs extends BaseComponent {
         </div>
         <div className={style.content}>
           <Route exact path="/" render={() => <div>Welcome</div>} />
-          <Route path="/:url+" render={ctx => this.matchChapter(ctx)} />
+          <Route path="/:url+" render={ctx => this.matchPage(ctx)} />
         </div>
       </div>
     );
