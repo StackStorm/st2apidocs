@@ -1,0 +1,65 @@
+.service {
+  &__header {
+    display: flex;
+    border-bottom: 1px solid #eee;
+
+    &__toggle {
+      font-weight: bold;
+      text-transform: uppercase;
+
+      display: block;
+
+      padding: 14px;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      flex: 1;
+    }
+  }
+
+  &__version {
+    &s {
+      display: flex;
+      padding: 0 8px;
+    }
+
+    & {
+      display: block;
+      width: 50px;
+
+      text-align: center;
+
+      padding: 14px 0;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      flex: 1;
+
+      &--selected {
+        box-shadow: inset 0 -3px #eee;
+      }
+
+      &:hover {
+        box-shadow: inset 0 -3px blue;
+      }
+    }
+  }
+
+  &__content {
+    border-bottom: 1px solid #eee;
+
+    &--hidden {
+      display: none;
+    }
+  }
+}

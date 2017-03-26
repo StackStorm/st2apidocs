@@ -1,0 +1,73 @@
+.entity {
+  margin: 10px 0;
+
+  &__header {
+    text-transform: capitalize;
+    font-weight: normal;
+
+    & a {
+      display: block;
+
+      padding: 8px 14px;
+
+      cursor: pointer;
+
+      user-select: none;
+
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+
+  &__controller {
+    font-size: inherit;
+    font-weight: lighter;
+
+    white-space: nowrap;
+
+    & a {
+      display: block;
+
+      padding: 8px 14px;
+
+      text-decoration: none;
+      color: inherit;
+    }
+
+    &__method {
+      display: inline-block;
+      width: 58px;
+
+      text-transform: uppercase;
+
+      &--get {
+        color: green;
+      }
+
+      &--post {
+        color: blue;
+      }
+
+      &--delete {
+        color: red;
+      }
+
+      &--put {
+        color: purple;
+      }
+    }
+
+    &:hover {
+      background-color: color(black a(10%));
+      cursor: pointer;
+    }
+  }
+
+  &__content {
+    font-size: 11px;
+  }
+}

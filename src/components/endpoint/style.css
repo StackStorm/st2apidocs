@@ -1,0 +1,49 @@
+.endpoint {
+  &__header {
+    background-color: #f9fafc;
+    border: solid #eee;
+    border-width: 1px 0;
+  }
+
+  &__controller {
+    font-size: 25px;
+    padding: 20px 8%;
+
+    & a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    &__method {
+      text-transform: uppercase;
+
+      &:after {
+        content: '\00a0';
+      }
+
+      &--get {
+        color: green;
+      }
+
+      &--post {
+        color: blue;
+      }
+
+      &--delete {
+        color: red;
+      }
+
+      &--put {
+        color: purple;
+      }
+    }
+  }
+
+  &__description {
+    padding: 20px 8%;
+  }
+
+  &__definition {
+    padding: 20px 8%;
+  }
+}
