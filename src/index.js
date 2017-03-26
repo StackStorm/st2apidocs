@@ -6,13 +6,13 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
 } from 'react-router-dom';
 import yaml from 'js-yaml';
 
 import Controller from './components/controller';
 import { BaseComponent } from './components/base';
-import { makeEntityLink } from './components/utils';
+import { makeEntityLink, makeAnchor } from './components/utils';
 
 import style from './style.css';
 
@@ -67,8 +67,6 @@ class Service extends BaseComponent {
   }
 
   renderVersion({ version }) {
-    const { service } = this.props;
-
     const isSelected = this.state.version === version;
 
     return (
@@ -173,11 +171,14 @@ class Entity extends BaseComponent {
 }
 
 class Chapter extends BaseComponent {
+  hashes = []
+
   renderChild({ model, method, action }) {
     const { service, version, entity } = this.props;
 
     const props = {
       key: `${method} ${action}`,
+      ref: (c) => { this.hashes[`#${makeAnchor({ model })}`] = c; },
       service,
       version,
       entity,
@@ -194,7 +195,10 @@ class Chapter extends BaseComponent {
 
     return (
       <div>
-        <header className={style.chapter.header}>
+        <header
+          className={style.chapter.header}
+          ref={(c) => { this.hashes[''] = c; }}
+        >
           <span className={style.chapter.header.version}>{ version }</span>
           <span className={style.chapter.header.entity}>{ entity || '/' }</span>
         </header>
@@ -208,16 +212,30 @@ class Chapter extends BaseComponent {
       </div>
     );
   }
+
+  componentDidMount() {
+    const { hash } = this.props;
+    this.hashes[hash].scrollIntoView();
+  }
+
+  componentDidUpdate() {
+    const { hash } = this.props;
+    this.hashes[hash].scrollIntoView();
+  }
 }
 
 class Endpoint extends BaseComponent {
+  scrollIntoView(...args) {
+    this.element.scrollIntoView(...args);
+  }
+
   render() {
     const controllerProps = Object.assign({
       style: style.endpoint.controller,
     }, this.props);
 
     return (
-      <div className={style.endpoint}>
+      <div ref={(c) => { this.element = c; }} className={style.endpoint}>
         <div className={style.endpoint.header}>
           <Controller {...controllerProps} />
           <EndpointDescription {...this.props} />
@@ -277,17 +295,19 @@ class ApiDocs extends BaseComponent {
     await this.setState({ tree });
   }
 
-  matchChapter({ match }) {
+  matchChapter({ match, location }) {
     if (!this.state.tree) {
       return null;
     }
 
     const [service, version, entity] = match.params.url.split('/');
+    const { hash } = location;
 
     const props = {
       service,
       version,
       entity,
+      hash,
       model: this.state.tree[service][version][entity || '']
     };
 
