@@ -8,6 +8,7 @@ import {
   Route,
 } from 'react-router-dom';
 import yaml from 'js-yaml';
+import $RefParser from 'json-schema-ref-parser';
 
 import { BaseComponent } from './components/base';
 
@@ -31,8 +32,9 @@ class ApiDocs extends BaseComponent {
     const resp = await fetch('/openapi.yaml');
     const yamlString = await resp.text();
     const spec = yaml.safeLoad(yamlString);
+    const fullSpec = await $RefParser.dereference(spec);
 
-    const tree = Object.entries(spec.paths)
+    const tree = Object.entries(fullSpec.paths)
       .reduce((acc, [url, endpoint]) => {
         const [, service, version, entity, ...rest] = url.split('/');
 

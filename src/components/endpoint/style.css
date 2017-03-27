@@ -7,7 +7,7 @@
 
   &__controller {
     font-size: 25px;
-    padding: 20px 8%;
+    padding: 40px 8% 20px;
 
     & a {
       text-decoration: none;
@@ -40,10 +40,103 @@
   }
 
   &__description {
-    padding: 20px 8%;
+    margin: 20px 8%;
+    padding: 0 15px;
   }
 
   &__definition {
-    padding: 20px 8%;
+    padding: 40px 8%;
+  }
+
+  &__parameter {
+    display: flex;
+
+    color: initial;
+
+    line-height: 27px;
+
+    &_type {
+      margin: 20px 0;
+
+      &__header {
+        font-size: 22px;
+        line-height: 30px;
+
+        font-weight: lighter;
+
+        margin: 10px 0;
+      }
+      &__content {
+        border: 1px solid #eee;
+      }
+      &__description {
+        padding: 0 15px;
+        color: initial;
+      }
+    }
+
+    &:nth-of-type(2n) {
+      background-color: #f9f9f9;
+    }
+
+    &:hover {
+      background-color: #f3f3f3;
+      cursor: pointer;
+    }
+
+    &__name {
+      padding-left: 15px;
+      padding-right: 8px;
+      min-width: 200px;
+    }
+
+    &__type {
+      padding-right: 8px;
+      color: LightSlateGray;
+
+      &--object {
+        color: blue;
+      }
+
+      &--array {
+        color: green;
+      }
+
+      &--string {
+        color: #008080;
+      }
+
+      &--integer, &--number {
+        color: red;
+      }
+
+      &--boolean {
+        color: purple;
+      }
+
+      &--null {
+        color: orange;
+      }
+
+      &--binary, &--file {
+        color: MediumAquaMarine
+      }
+    }
+
+    &__description {
+      padding-right: 8px;
+      flex-shrink: 1;
+
+      color: #999;
+    }
+
+    &__spacer {
+      flex-grow: 1;
+    }
+
+    &__optional {
+      padding-right: 15px;
+      color: #999;
+    }
   }
 }
