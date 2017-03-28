@@ -58,11 +58,11 @@ class EndpointDefinition extends BaseComponent {
 
 class ParameterType extends BaseComponent {
   render() {
-    const { type, model } = this.props;
+    const { type, model: { parameters = [] } } = this.props;
 
-    const elements = model.parameters
+    const elements = parameters
       .filter(parameter => parameter.in === type)
-      .map(m => <Parameter key={m.name} model={m} />)
+      .map(model => <Parameter key={model.name} model={model} />)
       ;
 
     if (!elements.length) {
@@ -102,9 +102,9 @@ class Parameter extends BaseComponent {
 
 class RequestBody extends BaseComponent {
   render() {
-    const { model } = this.props;
+    const { model: { parameters = [] } } = this.props;
 
-    const body = model.parameters.find(parameter => parameter.in === 'body');
+    const body = parameters.find(parameter => parameter.in === 'body');
 
     if (!body) {
       return false;
@@ -113,8 +113,8 @@ class RequestBody extends BaseComponent {
     const { description } = body;
     const { type, properties = [], required = [] } = compileSchema(body.schema);
 
-    const elements = _.map(properties, (m, name) => {
-      const extendedModel = _.assign({}, m, { name, required: !!~required.indexOf(name) });
+    const elements = _.map(properties, (model, name) => {
+      const extendedModel = _.assign({}, model, { name, required: !!~required.indexOf(name) });
       return <Parameter key={name} model={extendedModel} />;
     });
 
