@@ -1,0 +1,21 @@
+extends: airbnb
+plugins:
+  - react
+  - jsx-a11y
+  - import
+rules:
+  arrow-body-style:
+    - off
+  class-methods-use-this:
+    - off
+  comma-dangle:
+    - off
+  no-bitwise:
+    - error
+    - allow:
+      - '~'
+  react/jsx-filename-extension:
+    - off
+  react/no-did-mount-set-state:
+    - off
+parser: babel-eslint
