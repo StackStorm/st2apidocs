@@ -43,8 +43,8 @@ export default class Page extends BaseComponent {
         </header>
         {
           _.map(model, (methods, action) =>
-            _.map(methods, (model, method) =>
-              this.renderChild({ model, method, action })
+            _.map(methods, (m, method) =>
+              this.renderChild({ model: m, method, action })
             )
           )
         }
@@ -55,7 +55,11 @@ export default class Page extends BaseComponent {
   componentDidMount() {
     const { hash } = this.props;
 
-    this.hashes[hash].scrollIntoView();
+    const element = this.hashes[hash];
+
+    if (element) {
+      element.scrollIntoView();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +67,10 @@ export default class Page extends BaseComponent {
 
     if (hash === prevProps.hash) { return; }
 
-    this.hashes[hash].scrollIntoView();
+    const element = this.hashes[hash];
+
+    if (element) {
+      element.scrollIntoView();
+    }
   }
 }

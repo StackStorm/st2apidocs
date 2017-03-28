@@ -17,36 +17,15 @@ import Service from './components/service';
 
 import style from './style.css';
 
+
+if (window.serverRender) {
+  ReactDOM.render = window.serverRender;
+}
+
+
 class ApiDocs extends BaseComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      tree: null,
-    };
-
-    this.parseSpec();
-  }
-
-  async parseSpec() {
-    const resp = await fetch('/openapi.yaml');
-    const yamlString = await resp.text();
-    const spec = yaml.safeLoad(yamlString);
-    const fullSpec = await $RefParser.dereference(spec);
-
-    const tree = Object.entries(fullSpec.paths)
-      .reduce((acc, [url, endpoint]) => {
-        const [, service, version, entity, ...rest] = url.split('/');
-
-        return _.set(acc, [service, version, entity, rest.join('/')], endpoint);
-      }, {})
-      ;
-
-    await this.setState({ tree });
-  }
-
   matchPage({ match, location }) {
-    if (!this.state.tree) {
+    if (!this.props.tree) {
       return null;
     }
 
@@ -58,7 +37,7 @@ class ApiDocs extends BaseComponent {
       version,
       entity,
       hash,
-      model: this.state.tree[service][version][entity || '']
+      model: this.props.tree[service][version][entity || '']
     };
 
     return <Page {...props} />;
@@ -75,7 +54,7 @@ class ApiDocs extends BaseComponent {
   }
 
   render() {
-    const { tree } = this.state;
+    const { tree } = this.props;
 
     return (
       <div className={style.root}>
@@ -93,4 +72,19 @@ class ApiDocs extends BaseComponent {
   }
 }
 
-ReactDOM.render(<Router><ApiDocs /></Router>, document.getElementById('app'));
+(async () => {
+  const resp = await fetch('/openapi.yaml');
+  const yamlString = await resp.text();
+  const spec = yaml.safeLoad(yamlString);
+  const fullSpec = await $RefParser.dereference(spec);
+
+  return Object.entries(fullSpec.paths)
+    .reduce((acc, [url, endpoint]) => {
+      const [, service, version, entity, ...rest] = url.split('/');
+
+      return _.set(acc, [service, version, entity, rest.join('/')], endpoint);
+    }, {})
+    ;
+})().then((tree) => {
+  ReactDOM.render(<Router><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
+});
