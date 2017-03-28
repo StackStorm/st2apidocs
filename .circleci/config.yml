@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:7.7.3
+    working_directory: ~/st2apidocs
+    steps:
+      - checkout
+      - run:
+          name: Fetch latest StackStorm OpenAPI spec
+          command: curl -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/master/st2common/st2common/openapi.yaml
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Lint
+          command: npm run lint --silent || exit 0
+      - run:
+          name: Test
+          command: npm test
+      - run:
+          name: Install doc generator
+          command: npm install -g https://github.com/StackStorm/st2apidocgen
+      - run:
+          name: Generate API documentation
+          command: st2apidocgen --render --output
+      - store_artifacts:
+          path: ~/cci-demo-react/build
+      - deploy:
+          name: Deploying to S3
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ls -lah build
+            fi
