@@ -38,6 +38,26 @@
 
   overflow-x: hidden;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: rgba(200, 200, 200, .3);
+
+    &:hover {
+      background-color: rgba(200, 200, 200, .7);
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 }
 
 .content {
