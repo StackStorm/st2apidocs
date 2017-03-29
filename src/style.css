@@ -39,6 +39,8 @@
   overflow-x: hidden;
   overflow-y: scroll;
 
+  border-right: 1px solid #eee;
+
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -66,4 +68,24 @@
   overflow: auto;
 
   flex: 1;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: rgba(200, 200, 200, .3);
+
+    &:hover {
+      background-color: rgba(200, 200, 200, .7);
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 }
