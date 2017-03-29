@@ -55,7 +55,7 @@
 
     line-height: 27px;
 
-    &_type {
+    &_selection {
       margin: 20px 0;
 
       &__header {
@@ -73,6 +73,23 @@
         padding: 0 15px;
         color: initial;
       }
+      &__type {
+        padding: 0 15px;
+        line-height: 27px;
+      }
+    }
+
+    &__level0 &__name {
+      padding-left: 15px;
+    }
+    &__level1 &__name {
+      padding-left: 30px;
+    }
+    &__level2 &__name {
+      padding-left: 45px;
+    }
+    &__level3 &__name {
+      padding-left: 60px;
     }
 
     &:nth-of-type(2n) {
@@ -85,6 +102,7 @@
     }
 
     &__name {
+      box-sizing: border-box;
       padding-left: 15px;
       padding-right: 8px;
       min-width: 200px;
