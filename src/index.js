@@ -29,6 +29,13 @@ if (!window.fetch) {
 
 
 class ApiDocs extends BaseComponent {
+  state = {}
+
+  handleSearchChange(e) {
+    const filter = e.target.value;
+    return this.setState({ filter });
+  }
+
   matchPage({ match, location }) {
     if (!this.props.tree) {
       return null;
@@ -49,10 +56,13 @@ class ApiDocs extends BaseComponent {
   }
 
   renderService({ model, service }) {
+    const { filter } = this.state;
+
     const props = {
       key: service,
       service,
       model,
+      filter,
     };
 
     return <Service {...props} />;
@@ -64,6 +74,9 @@ class ApiDocs extends BaseComponent {
     return (
       <div className={style.root}>
         <div className={style.toc}>
+          <div className={style.toc.search}>
+            <input type="search" placeholder="Search" onChange={e => this.handleSearchChange(e)} />
+          </div>
           {
             _.map(tree, (model, service) => this.renderService({ model, service }))
           }

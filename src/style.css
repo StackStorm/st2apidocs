@@ -41,6 +41,27 @@
 
   border-right: 1px solid #eee;
 
+  padding-top: 40px;
+
+  position: relative;
+
+  &__search {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 350px;
+    height: 40px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    & input {
+      width: 100%;
+    }
+  }
+
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;

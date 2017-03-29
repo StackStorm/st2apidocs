@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -11,10 +10,10 @@ import style from './style.css';
 
 export default class Entity extends BaseComponent {
   renderChild({ model, method, action }) {
-    const { service, version, entity } = this.props;
+    const { service, version, entity, filter } = this.props;
 
     const props = {
-      key: `${method} ${action}`,
+      key: `${method} /${service}/${version}/${entity && `${entity}/`}${action}`,
       style: style.entity.controller,
       service,
       version,
@@ -24,11 +23,25 @@ export default class Entity extends BaseComponent {
       model,
     };
 
+    if (filter && !~props.key.indexOf(filter)) {
+      return false;
+    }
+
     return <Controller {...props} />;
   }
 
   render() {
     const { entity, model } = this.props;
+
+    const elements = Object.keys(model).map(action =>
+      Object.keys(model[action]).map(method =>
+        this.renderChild({ model: model[action][method], method, action })
+      ).filter(Boolean)
+    ).filter(e => e.length);
+
+    if (!elements.length) {
+      return false;
+    }
 
     return (
       <div className={style.entity}>
@@ -38,13 +51,7 @@ export default class Entity extends BaseComponent {
           </Link>
         </header>
         <div className={style.entity.content}>
-          {
-            _.map(model, (methods, action) =>
-              _.map(methods, (m, method) =>
-                this.renderChild({ model: m, method, action })
-              )
-            )
-          }
+          { elements }
         </div>
       </div>
     );

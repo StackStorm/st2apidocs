@@ -39,7 +39,7 @@ export default class Service extends BaseComponent {
   }
 
   renderChild({ model, entity }) {
-    const { service } = this.props;
+    const { service, filter } = this.props;
     const { version } = this.state;
 
     const props = {
@@ -48,6 +48,7 @@ export default class Service extends BaseComponent {
       version,
       entity,
       model,
+      filter,
     };
 
     return <Entity {...props} />;
