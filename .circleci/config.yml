@@ -25,7 +25,8 @@ jobs:
           name: Generate API documentation
           command: st2apidocgen --render --output
       - store_artifacts:
-          path: ~/cci-demo-react/build
+          path: ~/st2apidocs/build
+          destination: build
       - deploy:
           name: Deploying to S3
           command: |
