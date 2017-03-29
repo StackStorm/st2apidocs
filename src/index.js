@@ -41,8 +41,12 @@ class ApiDocs extends BaseComponent {
       return null;
     }
 
-    const [service, version, entity] = match.params.url.split('/');
+    const [service, version = '', entity = ''] = (match.params.url || '').split('/');
     const { hash } = location;
+
+    if (service === '' || service === 'index.html') {
+      return <div>Welcome</div>;
+    }
 
     const props = {
       service,
@@ -82,8 +86,7 @@ class ApiDocs extends BaseComponent {
           }
         </div>
         <div className={style.content}>
-          <Route exact path="/" render={() => <div>Welcome</div>} />
-          <Route path="/:url+" render={ctx => this.matchPage(ctx)} />
+          <Route path="/:url*" render={ctx => this.matchPage(ctx)} />
         </div>
       </div>
     );
