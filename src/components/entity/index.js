@@ -40,8 +40,8 @@ export default class Entity extends BaseComponent {
         <div className={style.entity.content}>
           {
             _.map(model, (methods, action) =>
-              _.map(methods, (model, method) =>
-                this.renderChild({ model, method, action })
+              _.map(methods, (m, method) =>
+                this.renderChild({ model: m, method, action })
               )
             )
           }

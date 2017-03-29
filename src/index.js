@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -37,7 +35,7 @@ class ApiDocs extends BaseComponent {
       version,
       entity,
       hash,
-      model: this.props.tree[service][version][entity || '']
+      model: this.props.tree[service][version][entity || ''],
     };
 
     return <Page {...props} />;

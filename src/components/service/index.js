@@ -70,13 +70,13 @@ export default class Service extends BaseComponent {
           </Interactive>
           <div className={style.service.versions}>
             {
-              _.map(model, (entites, version) => this.renderVersion({ version, entites }))
+              _.map(model, (entites, v) => this.renderVersion({ version: v, entites }))
             }
           </div>
         </header>
         <div className={`${style.service.content} ${hidden && style.service.content.hidden}`}>
           {
-            _.map(model[version], (model, entity) => this.renderChild({ model, entity }))
+            _.map(model[version], (m, entity) => this.renderChild({ model: m, entity }))
           }
         </div>
       </div>
