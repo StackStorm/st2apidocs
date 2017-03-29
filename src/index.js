@@ -91,7 +91,7 @@ class ApiDocs extends BaseComponent {
 }
 
 Promise.resolve()
-  .then(() => fetch('/openapi.yaml'))
+  .then(() => fetch('openapi.yaml'))
   .then(resp => resp.text())
   .then(yamlString => yaml.safeLoad(yamlString))
   .then(spec => $RefParser.dereference(spec))
@@ -103,5 +103,12 @@ Promise.resolve()
     }, {})
   )
   .then((tree) => {
-    ReactDOM.render(<Router><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
+    const routerProps = {};
+    const baseElement = document.querySelector('base');
+
+    if (baseElement && baseElement.href) {
+      routerProps.basename = baseElement.attributes.href.value;
+    }
+
+    ReactDOM.render(<Router {...routerProps}><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
   });

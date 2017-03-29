@@ -23,7 +23,7 @@ jobs:
           command: npm install -g https://github.com/StackStorm/st2apidocgen
       - run:
           name: Generate API documentation
-          command: st2apidocgen --render --output
+          command: st2apidocgen --render /0/build --output
       - store_artifacts:
           path: ~/st2apidocs/build
           destination: build
