@@ -1,3 +1,5 @@
+/* eslint global-require:off */
+
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -18,6 +20,11 @@ import style from './style.css';
 
 if (window.serverRender) {
   ReactDOM.render = window.serverRender;
+}
+
+if (!window.fetch) {
+  console.warn('No Fetch API. Polyfilling.');
+  require('whatwg-fetch');
 }
 
 
@@ -70,19 +77,18 @@ class ApiDocs extends BaseComponent {
   }
 }
 
-(async () => {
-  const resp = await fetch('/openapi.yaml');
-  const yamlString = await resp.text();
-  const spec = yaml.safeLoad(yamlString);
-  const fullSpec = await $RefParser.dereference(spec);
-
-  return Object.entries(fullSpec.paths)
-    .reduce((acc, [url, endpoint]) => {
+Promise.resolve()
+  .then(() => fetch('/openapi.yaml'))
+  .then(resp => resp.text())
+  .then(yamlString => yaml.safeLoad(yamlString))
+  .then(spec => $RefParser.dereference(spec))
+  .then(fullSpec => Object.keys(fullSpec.paths)
+    .reduce((acc, url) => {
       const [, service, version, entity, ...rest] = url.split('/');
 
-      return _.set(acc, [service, version, entity, rest.join('/')], endpoint);
+      return _.set(acc, [service, version, entity, rest.join('/')], fullSpec.paths[url]);
     }, {})
-    ;
-})().then((tree) => {
-  ReactDOM.render(<Router><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
-});
+  )
+  .then((tree) => {
+    ReactDOM.render(<Router><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
+  });
