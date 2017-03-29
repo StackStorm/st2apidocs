@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
+import CommonMark from 'commonmark';
+import CommonMarkReactRenderer from 'commonmark-react-renderer';
 
 import { BaseComponent } from '../base';
 import { compileSchema } from '../utils';
@@ -7,6 +9,10 @@ import { compileSchema } from '../utils';
 import Controller from '../controller';
 
 import style from './style.css';
+
+
+const commonmarkParser = new CommonMark.Parser();
+const commonmarkRenderer = new CommonMarkReactRenderer();
 
 
 export default class Endpoint extends BaseComponent {
@@ -35,9 +41,12 @@ class EndpointDescription extends BaseComponent {
   render() {
     const { description } = this.props.model;
 
+    const ast = commonmarkParser.parse(description);
+    const elements = commonmarkRenderer.render(ast);
+
     return (
       <div className={style.endpoint.description} >
-        { description }
+        { elements }
       </div>
     );
   }
@@ -135,7 +144,6 @@ class RequestBody extends BaseComponent {
       return false;
     }
 
-    const { description } = body;
     const model = compileSchema(body.schema);
     const { properties = [], required = [] } = model;
 
@@ -146,15 +154,28 @@ class RequestBody extends BaseComponent {
         <header className={style.endpoint.parameter_selection.header}>
           Request body
         </header>
-        <div className={style.endpoint.parameter_selection.description} >
-          <p>{ description }</p>
-        </div>
+        <RequestBodyDescription model={body} />
         <div className={style.endpoint.parameter_selection.content}>
           <div className={style.endpoint.parameter_selection.type}>
             <ParameterType model={model} />
           </div>
           { elements }
         </div>
+      </div>
+    );
+  }
+}
+
+class RequestBodyDescription extends BaseComponent {
+  render() {
+    const { description } = this.props.model;
+
+    const ast = commonmarkParser.parse(description);
+    const elements = commonmarkRenderer.render(ast);
+
+    return (
+      <div className={style.endpoint.parameter_selection.description} >
+        { elements }
       </div>
     );
   }

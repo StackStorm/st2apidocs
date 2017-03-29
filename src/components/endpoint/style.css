@@ -7,7 +7,7 @@
 
   &__controller {
     font-size: 25px;
-    padding: 40px 8% 20px;
+    margin: 40px 8% 20px;
 
     & a {
       text-decoration: none;

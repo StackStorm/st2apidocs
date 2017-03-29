@@ -105,7 +105,7 @@ paths:
     get:
       operationId: st2api.controllers.v1.actions:actions_controller.get_one
       description: |
-        Get one action.
+        Get **one** action.
       parameters:
         - name: ref_or_id
           in: path
