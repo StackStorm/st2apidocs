@@ -23,13 +23,18 @@ jobs:
           command: npm install -g https://github.com/StackStorm/st2apidocgen
       - run:
           name: Generate API documentation
-          command: st2apidocgen --render /0/build --output
+          command: st2apidocgen --render --output
       - store_artifacts:
           path: ~/st2apidocs/build
           destination: build
       - deploy:
+          name: Installing deploy dependencies
+          command: apt -y update && apt -y install awscli
+      - deploy:
           name: Deploying to S3
           command: |
+            find ~/st2apidocs/build | sed 's|[^/]*/|  |g'
+            aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region us-west-2
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ls -lah build
+              aws s3 sync build/ s3://api.stackstorm.com/ --region us-west-2 --delete
             fi
