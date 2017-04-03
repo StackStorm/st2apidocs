@@ -41,9 +41,15 @@
 
   border-right: 1px solid #eee;
 
-  padding-top: 40px;
-
   position: relative;
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    height: 40px;
+    width: 100%;
+  }
 
   &__search {
     position: fixed;

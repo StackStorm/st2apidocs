@@ -1,0 +1,10 @@
+.welcome {
+  padding: 40px 8%;
+
+  &__header {
+    display: block;
+    font-size: 4.242rem;
+    line-height: 4.5rem;
+    margin-top: 3rem;
+  }
+}

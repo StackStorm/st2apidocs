@@ -14,6 +14,7 @@ import { BaseComponent } from './components/base';
 
 import Page from './components/page';
 import Service from './components/service';
+import Welcome from './components/welcome';
 
 import style from './style.css';
 
@@ -37,15 +38,17 @@ class ApiDocs extends BaseComponent {
   }
 
   matchPage({ match, location }) {
-    if (!this.props.tree) {
-      return null;
+    if (!this.props.model) {
+      return false;
     }
+
+    const { services } = this.props.model;
 
     const [service, version = '', entity = ''] = (match.params.url || '').split('/');
     const { hash } = location;
 
     if (service === '' || service === 'index.html') {
-      return <div>Welcome</div>;
+      return <Welcome model={this.props.model} />;
     }
 
     const props = {
@@ -53,7 +56,7 @@ class ApiDocs extends BaseComponent {
       version,
       entity,
       hash,
-      model: this.props.tree[service][version][entity || ''],
+      model: services[service][version][entity || ''],
     };
 
     return <Page {...props} />;
@@ -73,7 +76,7 @@ class ApiDocs extends BaseComponent {
   }
 
   render() {
-    const { tree } = this.props;
+    const { services } = this.props.model;
 
     return (
       <div className={style.root}>
@@ -82,7 +85,7 @@ class ApiDocs extends BaseComponent {
             <input type="search" placeholder="Search" onChange={e => this.handleSearchChange(e)} />
           </div>
           {
-            _.map(tree, (model, service) => this.renderService({ model, service }))
+            _.map(services, (model, service) => this.renderService({ model, service }))
           }
         </div>
         <div className={style.content}>
@@ -102,10 +105,15 @@ Promise.resolve()
     .reduce((acc, url) => {
       const [, service, version, entity, ...rest] = url.split('/');
 
-      return _.set(acc, [service, version, entity, rest.join('/')], fullSpec.paths[url]);
-    }, {})
+      _.set(acc.services, [service, version, entity, rest.join('/')], fullSpec.paths[url]);
+
+      return acc;
+    }, {
+      info: fullSpec.info,
+      services: {}
+    })
   )
-  .then((tree) => {
+  .then((model) => {
     const routerProps = {};
     const baseElement = document.querySelector('base');
 
@@ -113,5 +121,5 @@ Promise.resolve()
       routerProps.basename = baseElement.attributes.href.value;
     }
 
-    ReactDOM.render(<Router {...routerProps}><ApiDocs tree={tree} /></Router>, document.getElementById('app'));
+    ReactDOM.render(<Router {...routerProps}><ApiDocs model={model} /></Router>, document.getElementById('app'));
   });

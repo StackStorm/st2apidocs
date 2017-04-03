@@ -1,18 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
-import CommonMark from 'commonmark';
-import CommonMarkReactRenderer from 'commonmark-react-renderer';
 
 import { BaseComponent } from '../base';
 import { compileSchema } from '../utils';
 
+import Commonmark from '../commonmark';
 import Controller from '../controller';
 
 import style from './style.css';
-
-
-const commonmarkParser = new CommonMark.Parser();
-const commonmarkRenderer = new CommonMarkReactRenderer();
 
 
 export default class Endpoint extends BaseComponent {
@@ -41,13 +36,10 @@ class EndpointDescription extends BaseComponent {
   render() {
     const { description } = this.props.model;
 
-    const ast = commonmarkParser.parse(description);
-    const elements = commonmarkRenderer.render(ast);
-
     return (
-      <div className={style.endpoint.description} >
-        { elements }
-      </div>
+      <Commonmark className={style.endpoint.description} >
+        { description }
+      </Commonmark>
     );
   }
 }
@@ -170,13 +162,10 @@ class RequestBodyDescription extends BaseComponent {
   render() {
     const { description } = this.props.model;
 
-    const ast = commonmarkParser.parse(description);
-    const elements = commonmarkRenderer.render(ast);
-
     return (
-      <div className={style.endpoint.parameter_selection.description} >
-        { elements }
-      </div>
+      <Commonmark className={style.endpoint.parameter_selection.description} >
+        { description }
+      </Commonmark>
     );
   }
 }
