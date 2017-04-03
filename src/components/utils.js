@@ -33,3 +33,35 @@ export function compileSchema(scheme) {
 
   return result;
 }
+
+export function traverseSchema(model, prefix = []) {
+  const { items = {} } = model;
+  const { properties = items.properties || {}, required = items.required || [] } = model;
+
+  return _.flatMap(properties, (m, name) => {
+    const extendedModel = _.assign({}, m, { name, required: !!~required.indexOf(name) });
+    const key = prefix.concat(name);
+
+    if (m.type === 'object') {
+      return [{
+        key: key.join('.'),
+        level: key.length,
+        model: extendedModel
+      }].concat(traverseSchema(m, key));
+    }
+
+    if (m.type === 'array') {
+      return [{
+        key: key.join('.'),
+        level: key.length,
+        model: extendedModel
+      }].concat(traverseSchema(m, key));
+    }
+
+    return {
+      key: key.join('.'),
+      level: key.length,
+      model: extendedModel
+    };
+  });
+}

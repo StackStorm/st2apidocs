@@ -56,6 +56,7 @@
     line-height: 27px;
 
     &_selection {
+      position: relative;
       margin: 20px 0;
 
       &__header {
@@ -155,6 +156,39 @@
     &__optional {
       padding-right: 15px;
       color: #999;
+    }
+  }
+
+  &__responses {
+    &__status {
+      &es {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      & {
+        display: inline-block;
+        width: 50px;
+
+        text-align: center;
+
+        line-height: 30px;
+
+        cursor: pointer;
+
+        user-select: none;
+
+        text-decoration: none;
+        color: inherit;
+
+        &--selected {
+          box-shadow: inset 0 -3px #eee;
+        }
+
+        &:hover {
+          box-shadow: inset 0 -3px blue;
+        }
+      }
     }
   }
 }
