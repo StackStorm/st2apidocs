@@ -20,6 +20,10 @@
   padding: 2px;
 }
 
+:global(code) {
+  font-family: 'Inconsolata', monospace;
+}
+
 .root {
   margin: 0;
   background-color: #fff;
