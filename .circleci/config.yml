@@ -29,12 +29,16 @@ jobs:
           destination: build
       - deploy:
           name: Installing deploy dependencies
-          command: apt -y update && apt -y install awscli
+          command: |
+            apt -y update
+            apt -y install awscli
+            aws configure set preview.cloudfront true
       - deploy:
           name: Deploying to S3
           command: |
             find ~/st2apidocs/build | sed 's|[^/]*/|  |g'
             aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region us-west-2
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              aws s3 sync build/ s3://api.stackstorm.com/ --region us-west-2 --delete
+              aws s3 sync build/ s3://api.stackstorm.com/ --region ${REGION} --delete
+              aws cloudfront create-invalidation --distribution-id=${DISTRIBUTION_ID} --paths="/*"
             fi
