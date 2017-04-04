@@ -41,7 +41,7 @@
   }
 
   &__description {
-    margin: 20px 8%;
+    margin: 1.5rem 8%;
     padding: 0 15px;
     max-width: 900px;
   }
@@ -73,6 +73,7 @@
       }
       &__description {
         padding: 0 15px;
+        margin: 1.5rem 0;
       }
       &__type {
         padding: 0 15px;
