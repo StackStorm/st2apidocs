@@ -88,7 +88,7 @@ class Parameter extends BaseComponent {
         <ParameterType model={model} />
         <div className={style.endpoint.parameter.description}>{ description }</div>
         <div className={style.endpoint.parameter.spacer} />
-        { !required && <div className={style.endpoint.parameter.optional}>optional</div>}
+        { required && <div className={style.endpoint.parameter.optional}>required</div>}
       </div>
     );
   }
