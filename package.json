@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^6.9.0"
   },
   "dependencies": {
+    "@stackstorm/react-sticky": "5.0.5",
     "commonmark": "0.27.0",
     "commonmark-react-renderer": "4.3.2",
     "js-yaml": "3.8.2",

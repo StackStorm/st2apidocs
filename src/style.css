@@ -23,7 +23,7 @@
 .root {
   margin: 0;
   background-color: #fff;
-  color: #222;
+  color: #444;
 
   display: flex;
 
@@ -43,7 +43,6 @@
 
   position: relative;
 
-  &:before,
   &:after {
     content: "";
     display: block;
@@ -51,12 +50,14 @@
     width: 100%;
   }
 
-  &__search {
-    position: fixed;
-    top: 0;
-    left: 0;
+  &__logo {
+    display: block;
+    width: 170px;
+    margin: 40px auto 20px;
+    fill: #444;
+  }
 
-    width: 350px;
+  &__search {
     height: 40px;
 
     padding: 10px;

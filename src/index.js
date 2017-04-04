@@ -6,12 +6,15 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
+  Link,
 } from 'react-router-dom';
+import { StickyContainer, Sticky } from '@stackstorm/react-sticky';
 import yaml from 'js-yaml';
 import $RefParser from 'json-schema-ref-parser';
 
 import { BaseComponent } from './components/base';
 
+import Logo from './components/logo';
 import Page from './components/page';
 import Service from './components/service';
 import Welcome from './components/welcome';
@@ -80,14 +83,17 @@ class ApiDocs extends BaseComponent {
 
     return (
       <div className={style.root}>
-        <div className={style.toc}>
-          <div className={style.toc.search}>
+        <StickyContainer className={style.toc}>
+          <Link to="/">
+            <Logo className={style.toc.logo} />
+          </Link>
+          <Sticky className={style.toc.search} useContainerEvents >
             <input type="search" placeholder="Search" onChange={e => this.handleSearchChange(e)} />
-          </div>
+          </Sticky>
           {
             _.map(services, (model, service) => this.renderService({ model, service }))
           }
-        </div>
+        </StickyContainer>
         <div className={style.content}>
           <Route path="/:url*" render={ctx => this.matchPage(ctx)} />
         </div>
