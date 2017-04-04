@@ -1,5 +1,6 @@
 .welcome {
   padding: 40px 8%;
+  max-width: 800px;
 
   &__header {
     display: block;

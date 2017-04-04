@@ -1,6 +1,7 @@
 .page {
   &__header {
     padding: 50px 8%;
+    max-width: 800px;
 
     &__entity {
       display: inline-block;

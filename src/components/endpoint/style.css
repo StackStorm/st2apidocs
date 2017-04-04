@@ -8,6 +8,7 @@
   &__controller {
     font-size: 25px;
     margin: 40px 8% 20px;
+    max-width: 900px;
 
     & a {
       text-decoration: none;
@@ -42,10 +43,12 @@
   &__description {
     margin: 20px 8%;
     padding: 0 15px;
+    max-width: 900px;
   }
 
   &__definition {
     padding: 40px 8%;
+    max-width: 800px;
   }
 
   &__parameter {

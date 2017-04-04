@@ -33,7 +33,7 @@ export default class Page extends BaseComponent {
     const { entity, version, model } = this.props;
 
     return (
-      <div>
+      <div className={style.page}>
         <header
           className={style.page.header}
           ref={(c) => { this.hashes[''] = c; }}
