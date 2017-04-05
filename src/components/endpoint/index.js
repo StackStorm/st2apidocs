@@ -95,12 +95,26 @@ class Parameter extends BaseComponent {
 }
 
 class ParameterType extends BaseComponent {
-  render() {
-    const { type, items } = this.props.model;
+  renderChild(type = 'any') {
+    const { items } = this.props.model;
 
     return (
-      <div className={`${style.endpoint.parameter.type} ${style.endpoint.parameter.type[type]}`}>
+      <span key={type} className={style.endpoint.parameter.type[type]}>
         { type }{ items && items.type && `[${items.type}]`}
+      </span>
+    );
+  }
+
+  render() {
+    const { type } = this.props.model;
+
+    return (
+      <div className={style.endpoint.parameter.type}>
+        {
+          [].concat(type)
+            .map(t => this.renderChild(t))
+            .reduce((acc, e, i, arr) => acc.concat(i === arr.length - 1 ? [e] : [e, ', ']), [])
+        }
       </div>
     );
   }

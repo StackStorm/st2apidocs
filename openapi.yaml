@@ -1180,9 +1180,7 @@ paths:
         '200':
           description: Information about a pack.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PackView'
+            $ref: '#/definitions/PackView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1281,6 +1279,7 @@ paths:
         '200':
           description: Pack search results.
           schema:
+            type: array
             items:
               - $ref: '#/definitions/PacksList'
           examples:
@@ -1301,9 +1300,7 @@ paths:
         '200':
           description: Index health.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PackIndex'
+            $ref: '#/definitions/PackIndex'
           examples:
             application/json:
               ref: 'core.local'
@@ -1414,9 +1411,7 @@ paths:
         '200':
           description: Config for a particular pack.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PackConfigView'
+            $ref: '#/definitions/PackConfigView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1442,9 +1437,7 @@ paths:
         '200':
           description: Config for a particular pack.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PackConfigCreate'
+            $ref: '#/definitions/PackConfigCreate'
           examples:
             application/json:
               ref: 'core.local'
@@ -1490,9 +1483,7 @@ paths:
         '200':
           description: Config schema for a particular pack.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PackConfigView'
+            $ref: '#/definitions/PackConfigView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1542,9 +1533,7 @@ paths:
         '200':
           description: Specific policy type.
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/PolicyTypeList'
+            $ref: '#/definitions/PolicyTypeList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1571,6 +1560,7 @@ paths:
         '200':
           description: Policy created successfully.
           schema:
+            type: array
             items:
               - $ref: '#/definitions/PolicyList'
           examples:
@@ -1596,8 +1586,7 @@ paths:
         '200':
           description: Policy created successfully.
           schema:
-            items:
-              - $ref: '#/definitions/PolicyList'
+            $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1621,8 +1610,7 @@ paths:
         '200':
           description: Policy found.
           schema:
-            items:
-              - $ref: '#/definitions/PolicyList'
+            $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1651,8 +1639,7 @@ paths:
         '200':
           description: Policy updated successfully.
           schema:
-            items:
-              - $ref: '#/definitions/PolicyList'
+            $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -2548,9 +2535,7 @@ paths:
         '200':
           description: Rule Enforcements based on ref or id
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/RuleEnforcementsList'
+            $ref: '#/definitions/RuleEnforcementsList'
           examples:
             application/json:
               ref: 'core.local'
@@ -2596,9 +2581,7 @@ paths:
         '200':
           description: Trace
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/TimersList'
+            $ref: '#/definitions/TimersList'
           examples:
             application/json:
               ref: 'core.local'
@@ -2672,9 +2655,7 @@ paths:
         '200':
           description: Trace
           schema:
-            type: object
-            items:
-              $ref: '#/definitions/TracesList'
+            $ref: '#/definitions/TracesList'
           examples:
             application/json:
               ref: 'core.local'
