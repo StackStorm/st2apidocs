@@ -23,7 +23,12 @@ jobs:
           command: npm install -g https://github.com/StackStorm/st2apidocgen
       - run:
           name: Generate API documentation
-          command: st2apidocgen --render --output
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              st2apidocgen --render --output
+            else
+              st2apidocgen --render /${CIRCLE_BUILD_NUM} --output
+            fi
       - store_artifacts:
           path: ~/st2apidocs/build
           destination: build
@@ -37,8 +42,9 @@ jobs:
           name: Deploying to S3
           command: |
             find ~/st2apidocs/build | sed 's|[^/]*/|  |g'
-            aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region ${REGION}
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 sync build/ s3://api.stackstorm.com/ --region ${REGION} --delete
               aws cloudfront create-invalidation --distribution-id=${DISTRIBUTION_ID} --paths="/*"
+            else
+              aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region ${REGION}
             fi
