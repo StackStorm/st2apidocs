@@ -30,8 +30,8 @@ jobs:
       - deploy:
           name: Installing deploy dependencies
           command: |
-            apt -y update
-            apt -y install awscli
+            apt -y update && apt -y install python-pip
+            pip install awscli==1.11.18
             aws configure set preview.cloudfront true
       - deploy:
           name: Deploying to S3
