@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Fetch latest StackStorm OpenAPI spec
-          command: curl -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/master/st2common/st2common/openapi.yaml
+          command: curl -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_GITREV:-$CIRCLE_BRANCH}/st2common/st2common/openapi.yaml
       - run:
           name: Install Dependencies
           command: npm install
@@ -37,7 +37,7 @@ jobs:
           name: Deploying to S3
           command: |
             find ~/st2apidocs/build | sed 's|[^/]*/|  |g'
-            aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region us-west-2
+            aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region ${REGION}
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 sync build/ s3://api.stackstorm.com/ --region ${REGION} --delete
               aws cloudfront create-invalidation --distribution-id=${DISTRIBUTION_ID} --paths="/*"
