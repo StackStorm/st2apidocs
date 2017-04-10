@@ -84,8 +84,8 @@ class ApiDocs extends BaseComponent {
     return (
       <div className={style.root}>
         <StickyContainer className={style.toc}>
-          <Link to="/">
-            <Logo className={style.toc.logo} />
+          <Link to="/" className={style.toc.logo} >
+            <Logo />
           </Link>
           <Sticky className={style.toc.search} useContainerEvents >
             <input type="search" placeholder="Search" onChange={e => this.handleSearchChange(e)} />
