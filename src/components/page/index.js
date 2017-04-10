@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 
 import { BaseComponent } from '../base';
@@ -42,11 +41,14 @@ export default class Page extends BaseComponent {
           <span className={style.page.header.entity}>{ entity || '/' }</span>
         </header>
         {
-          _.map(model, (methods, action) =>
-            _.map(methods, (m, method) =>
-              this.renderChild({ model: m, method, action })
+          Object.keys(model)
+            .sort()
+            .map(action =>
+              Object.keys(model[action])
+                .map(method =>
+                  this.renderChild({ method, action, model: model[action][method] })
+                )
             )
-          )
         }
       </div>
     );

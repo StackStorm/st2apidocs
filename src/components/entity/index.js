@@ -33,11 +33,16 @@ export default class Entity extends BaseComponent {
   render() {
     const { entity, model } = this.props;
 
-    const elements = Object.keys(model).map(action =>
-      Object.keys(model[action]).map(method =>
-        this.renderChild({ model: model[action][method], method, action })
-      ).filter(Boolean)
-    ).filter(e => e.length);
+    const elements = Object.keys(model)
+      .sort()
+      .map(action =>
+        Object.keys(model[action])
+          .map(method =>
+            this.renderChild({ model: model[action][method], method, action })
+          )
+          .filter(Boolean)
+      )
+      .filter(e => e.length);
 
     if (!elements.length) {
       return false;

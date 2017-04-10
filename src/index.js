@@ -91,7 +91,9 @@ class ApiDocs extends BaseComponent {
             <input type="search" placeholder="Search" onChange={e => this.handleSearchChange(e)} />
           </Sticky>
           {
-            _.map(services, (model, service) => this.renderService({ model, service }))
+            Object.keys(services)
+              .sort()
+              .map(service => this.renderService({ service, model: services[service] }))
           }
         </StickyContainer>
         <div className={style.content}>

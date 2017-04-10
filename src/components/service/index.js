@@ -58,6 +58,8 @@ export default class Service extends BaseComponent {
     const { service, model } = this.props;
     const { version, hidden } = this.state;
 
+    const entities = model[version];
+
     return (
       <div className={style.service}>
         <header className={style.service.header}>
@@ -77,7 +79,9 @@ export default class Service extends BaseComponent {
         </header>
         <div className={`${style.service.content} ${hidden && style.service.content.hidden}`}>
           {
-            _.map(model[version], (m, entity) => this.renderChild({ model: m, entity }))
+            Object.keys(entities)
+              .sort()
+              .map(entity => this.renderChild({ entity, model: entities[entity] }))
           }
         </div>
       </div>
