@@ -1,8 +1,9 @@
 .service {
-  margin-bottom: 30px;
+  padding-bottom: 30px;
 
   &__header {
     display: flex;
+    border-bottom: 1px solid #6a7a7c;
 
     &__toggle {
       font-weight: bold;
@@ -47,18 +48,16 @@
       flex: 1;
 
       &--selected {
-        box-shadow: inset 0 -3px #eee;
+        box-shadow: inset 0 -3px #6a7a7c;
       }
 
       &:hover {
-        box-shadow: inset 0 -3px blue;
+        box-shadow: inset 0 -3px #fb8225;
       }
     }
   }
 
   &__content {
-    border-top: 1px solid #eee;
-
     &--hidden {
       display: none;
     }

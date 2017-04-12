@@ -47,6 +47,9 @@
 
   position: relative;
 
+  background: #4d585a;
+  color: #fff;
+
   &__logo {
     display: flex;
     flex-direction: column;
@@ -79,7 +82,7 @@
     width: 5px;
     height: 5px;
 
-    background-color: transparent;
+    background-color: #fff;
   }
 
   &::-webkit-scrollbar-thumb {

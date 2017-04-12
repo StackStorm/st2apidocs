@@ -18,14 +18,13 @@
       color: inherit;
 
       &:hover {
-        color: blue;
+        color: #fb8225;
       }
     }
   }
 
   &__controller {
     font-size: inherit;
-    font-weight: lighter;
 
     white-space: nowrap;
 
@@ -45,19 +44,19 @@
       text-transform: uppercase;
 
       &--get {
-        color: green;
+        color: #34ea40;
       }
 
       &--post {
-        color: blue;
+        color: #2c91ff;
       }
 
       &--delete {
-        color: red;
+        color: #ff3535;
       }
 
       &--put {
-        color: purple;
+        color: #dc3fff;
       }
     }
 

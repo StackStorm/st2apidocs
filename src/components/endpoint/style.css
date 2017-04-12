@@ -23,19 +23,19 @@
       }
 
       &--get {
-        color: green;
+        color: #34ea40;
       }
 
       &--post {
-        color: blue;
+        color: #2c91ff;
       }
 
       &--delete {
-        color: red;
+        color: #ff3535;
       }
 
       &--put {
-        color: purple;
+        color: #dc3fff;
       }
     }
   }
@@ -115,11 +115,11 @@
       color: LightSlateGray;
 
       &--object {
-        color: blue;
+        color: #2c91ff;
       }
 
       &--array {
-        color: green;
+        color: #34ea40;
       }
 
       &--string {
@@ -127,19 +127,19 @@
       }
 
       &--integer, &--number {
-        color: red;
+        color: #ff3535;
       }
 
       &--boolean {
-        color: purple;
+        color: #dc3fff;
       }
 
       &--null {
-        color: orange;
+        color: #6a7a7c;
       }
 
       &--binary, &--file {
-        color: MediumAquaMarine
+        color: #14d8d8;
       }
     }
 
