@@ -8,7 +8,12 @@ jobs:
       - checkout
       - run:
           name: Fetch latest StackStorm OpenAPI spec
-          command: curl -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_GITREV:-$CIRCLE_BRANCH}/st2common/st2common/openapi.yaml
+          command: |
+            curl -SsL -q -o jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+            chmod +x ./jq
+            BUILD_NUM="$(curl -Ss -q https://circleci.com/api/v1.1/project/github/StackStorm/st2 | ./jq -r ". | map(select(.branch == \"${ST2_GITREV:-$CIRCLE_BRANCH}\" and .outcome == \"success\")) | max_by(.build_num) | .build_num")"
+            SPEC_URL="$(curl -Ss -q https://circleci.com/api/v1.1/project/github/StackStorm/st2/${BUILD_NUM}/artifacts | ./jq -r '.[].url' | grep openapi.yaml)"
+            curl -Ss -q -o openapi.yaml ${SPEC_URL}
       - run:
           name: Install Dependencies
           command: npm install

@@ -4,30 +4,42 @@ info:
   version: "1.0.0"
   title: StackStorm API
   description: |
+    
     ## Welcome
+
     Welcome to the StackStorm API Reference documentation! You can use the StackStorm API to integrate StackStorm with 3rd-party systems and custom applications. Example integrations include writing your own self-service user portal, or integrating with other orchestration systems.
+
     This document provides an overview of how to use the API. Use the menu on the left to look up details of specific API endpoints. For more information about how StackStorm works, and how to use it, check out the main [StackStorm documentation](https://docs.stackstorm.com).
-    ## A Quick Note
-    This API is intended for software developers, and those are who are comfortable working with RESTful APIs, and writing some code. You do not need to use this API to work with StackStorm, or to use and write integration packs for StackStorm.
+
+    > ### A Quick Note
+    > This API is intended for software developers, and those are who are comfortable working with RESTful APIs, and writing some code. You do not need to use this API to work with StackStorm, or to use and write integration packs for StackStorm.
+
     ## Accessing the API
-    Usually the API is available at `https://<ST2_IP>/api`. The default implementation is to use Nginx as a front-end, passing `/api`/ requests through to the `st2api` service, which by default listens on port `9101`. On a [reference single-system deployment](https://docs.stackstorm.com/install/index.html), all processes run on the same system. If you have a [multi-system deployment](https://docs.stackstorm.com/reference/ha.html), the components may be running on multiple systems, and may be load-balanced.
-    ## Authentication (****Section needs updating****)
-    To authenticate against the StackStorm API, either an authentication token or an API key (but not both) should be provided in the HTTP request headers. The headers are named `X-Auth-Token` and `St2-Api-Key` respectively.
+
+    Usually the API is available at `https://$ST2_HOSTNAME/api`. The default implementation is to use Nginx as a front-end, passing `/api` requests through to the `st2api` service, which by default listens on port `9101`. On a [reference single-system deployment](https://docs.stackstorm.com/install/index.html), all processes run on the same system. If you have a [multi-system deployment](https://docs.stackstorm.com/reference/ha.html), the components may be running on multiple systems, and may be load-balanced.
+
+    ## Authentication
+
+    To authenticate against the StackStorm API, either an authentication token or an API key (but not both) should be provided in the HTTP request headers. The headers are named `X-Auth-Token` and `St2-Api-Key` respectively. In situation when it is impossble to provide a header to the response, query parameters `x-auth-token` and `st2-api-key` could be used instead, but would require you to weight in on security implications.
+
     An authentication token is a time-limited access token, granted once a user authenticates, typically using a username and password. This is suitable for short-term, interactive sessions. [API Keys](https://docs.stackstorm.com/authentication.html#api-keys) do not expire, and are therefore better suited for use with integrating other applications.
+
     ### Authentication Tokens
-    If you are using authentication tokens, you need to first obtain a token using the `/auth` endpoint, and then use the token for future requests against the `/api/` endpoint. To obain a token:
+
+    If you are using authentication tokens, you need to first obtain a token using the `/auth` endpoint, and then use the token for future requests against the `/api` endpoint. To obain a token:
 
     ```
-    curl -X POST -u yourusername:'yourpassword' https://myhost.example.com/auth/v1/tokens
+    curl -X POST -u 'yourusername:yourpassword' https://$ST2_HOSTNAME/auth/v1/tokens
     ```
 
     You can then use the token like this:
 
     ```
     # Token as header
-    curl -H "X-Auth-Token: 4d76e023841a4a91a9c66aa4541156fe" https://myhost.example.com/api/v1/actions
+    curl -H "X-Auth-Token: 4d76e023841a4a91a9c66aa4541156fe" https://$ST2_HOSTNAME/api/v1/actions
+
     # Token as query parameter
-    curl "https://myhost.example.com/api/v1/actions?x-auth-token=4d76e023841a4a91a9c66aa4541156fe"
+    curl "https://$ST2_HOSTNAME/api/v1/actions?x-auth-token=4d76e023841a4a91a9c66aa4541156fe"
     ```
 
     ### API Keys
@@ -36,23 +48,21 @@ info:
 
     ```
     st2 apikey create -k -m '{"used_by": "my integration"}'
-    <API_KEY_VALUE>
     ```
 
     Note the use of the option `-m` flag to provide key metadata. This is good practice, because it helps to identify what the key is used for. This is useful if you need to later revoke or disable keys.
 
-    Keys can also be created using the API,
-
+    Keys can also be created using the [apikeys](api/v1/apikeys/) API.
 
     Using the API key:
 
     ```
     # Key as header
-    curl -H "St2-Api-Key: <API-KEY-VALUE>" https://myhost.example.com/api/v1/actions
-    # Key as query parameter
-    curl https://myhost.example.com/api/v1/actions?st2-api-key=<API-KEY-VALUE>
-    ```
+    curl -H "St2-Api-Key: <API-KEY-VALUE>" https://$ST2_HOSTNAME/api/v1/actions
 
+    # Key as query parameter
+    curl https://$ST2_HOSTNAME/api/v1/actions?st2-api-key=<API-KEY-VALUE>
+    ```
 
     ## HTTP Methods
 
@@ -63,6 +73,10 @@ info:
     * **PUT:** Use to create or update a resource, e.g. to update an existing Key-Value pair.
     * **DELETE:** Remove a resource, e.g. delete an API key.
 
+    There is also an implicit support of **OPTIONS** method that will return a set of CORS-related headers.
+
+    Methods **HEAD** and **PATCH** are not supported in API v1, but might be considered in future iterations.
+
     ## SSL
 
     By default, StackStorm generates a self-signed certificate. If you are testing this with `curl`, you may need to disable certificate validation with `curl -k`. We **strongly** recommend you configure valid, signed certificates for StackStorm.
@@ -71,28 +85,61 @@ info:
 
     The StackStorm API only supports JSON, not XML. Most POST requests require a well-formatted JSON object body.
 
-
-    ## Code Examples (****SECTION NEEDS UPDATE****)
+    ## Code Examples
 
     These are some examples to show how to use the StackStorm API with cURL. You can use any REST-capable client, library or programming language to access the StackStorm API.
 
     Obtaining an authentication token:
 
     ```
-    curl -X POST -k -u st2admin:'Ch@ngeMe' https://myhost.example.com/auth/v1/tokens
+    $ curl -X POST -k -u st2admin:'Ch@ngeMe' https://$ST2_HOSTNAME/auth/v1/tokens
     {"user": "st2admin", "token": "866218ad67e141e4aaddbbb92964e67e", "expiry": "2017-04-06T01:15:06.602758Z", "id": "58e4451ac4da5f1e040fb859", "metadata": {}}
     ```
 
     List rules for the ChatOps pack:
+
     ```
-    curl -k -X GET -H 'X-Auth-Token: b99d3f74a16e471992f2a10935637916' 'https://myhost.example.com/api/v1/rules?limit=50&pack=chatops'
+    $ curl -k -X GET -H 'X-Auth-Token: b99d3f74a16e471992f2a10935637916' 'https://$ST2_HOSTNAME/api/v1/rules?limit=50&pack=chatops'
     [{"description": "Notification rule to send results of action executions to stream for chatops", "tags": [], "type": {"ref": "standard", "parameters": {}}, "enabled": true, "name": "notify", "trigger": {"ref": "core.st2.generic.notifytrigger", "type": "core.st2.generic.notifytrigger", "parameters": {}}, "criteria": {"trigger.route": {"pattern": "hubot", "type": "equals"}}, "action": {"ref": "chatops.post_result", "parameters": {"user": "{{trigger.data.user}}", "execution_id": "{{trigger.execution_id}}", "channel": "{{trigger.data.source_channel}}"}}, "pack": "chatops", "ref": "chatops.notify", "id": "58b7089ac4da5f6aa779b85a", "uid": "rule:chatops:notify"}]
     ```
+
     Load a new rule:
+
     ```
-    curl -X POST -H  'content-type: application/json' -H  'X-Auth-Token: b99d3f74a16e471992f2a10935637916' -H  'Content-Length: 329' --data-binary '{"description": "Sample rule using an Interval Timer.", "enabled": false, "trigger": {"type": "core.st2.IntervalTimer", "parameters": {"unit": "seconds", "delta": 5}}, "criteria": {}, "action": {"ref": "core.local", "parameters": {"cmd": "echo \"{{trigger.executed_at}}\""}}, "pack": "examples", "name": "sample_rule_with_timer"}' https://myhost.example.com/api/v1/rules
+    $ curl -X POST -H 'content-type: application/json' -H 'X-Auth-Token: b99d3f74a16e471992f2a10935637916' --data-binary '{"description": "Sample rule using an Interval Timer.", "enabled": false, "trigger": {"type": "core.st2.IntervalTimer", "parameters": {"unit": "seconds", "delta": 5}}, "criteria": {}, "action": {"ref": "core.local", "parameters": {"cmd": "echo \"{{trigger.executed_at}}\""}}, "pack": "examples", "name": "sample_rule_with_timer"}' https://$ST2_HOSTNAME/api/v1/rules
+    {
+        "description": "Sample rule using an Interval Timer.",
+        "tags": [],
+        "type": {
+            "ref": "standard",
+            "parameters": {}
+        },
+        "enabled": false,
+        "name": "sample_rule_with_timer",
+        "trigger": {
+            "ref": "core.cab3cb5f-f0c5-466b-b27c-dc481fc19fac",
+            "type": "core.st2.IntervalTimer",
+            "parameters": {
+                "unit": "seconds",
+                "delta": 5
+            }
+        },
+        "criteria": {},
+        "action": {
+            "ref": "core.local",
+            "parameters": {
+                "cmd": "echo \"{{trigger.executed_at}}\""
+            }
+        },
+        "pack": "examples",
+        "ref": "examples.sample_rule_with_timer",
+        "id": "58eddb871878c12be65c9fdd",
+        "uid": "rule:examples:sample_rule_with_timer"
+    }
     ```
+
     ### Further examples
+
     For further examples of using the API, check out the `st2 --debug` command. If you know which st2 command you want, run `st2 --debug <st2 command>`, and it will display the equivalent cURL commands. For example:
 
     ```
@@ -103,6 +150,7 @@ info:
     # -------- begin 37703888 response ----------
     [{"name": "format_execution_result", "parameters": {"execution_id": {"required": true, "type": "string", "description": "Id of execution to format"}}, "tags": [], "description": "Format an execution result for chatops", "enabled": true, "entry_point": "format_execution_result.py", "notify": {}, "uid": "action:chatops:format_execution_result", "pack": "chatops", "ref": "chatops.format_execution_result", "id": "58b7089ac4da5f6aa779b847", "runner_type": "run-python"}, {"name": "post_message", "parameters": {"extra": {"type": "object", "description": "Extra adapter-specific parameters."}, "whisper": {"default": false, "type": "boolean", "description": "Send a private message to user"}, "route": {"default": "chatops"}, "experimental": {"default": true, "immutable": true}, "user": {"type": "string", "description": "Explicitly notify a user"}, "message": {"required": true, "type": "string", "description": "Message to send."}, "channel": {"required": true, "type": "string", "description": "Channel to post to"}}, "tags": [], "description": "Post a message to stream for chatops", "enabled": true, "entry_point": "", "notify": {}, "uid": "action:chatops:post_message", "pack": "chatops", "ref": "chatops.post_message", "id": "58b7089ac4da5f6aa779b848", "runner_type": "announcement"}, {"name": "post_result", "parameters": {"whisper": {"default": false, "type": "boolean", "description": "Send a private message to user"}, "user": {"type": "string", "description": "Explicitly notify a user"}, "execution_id": {"required": true, "type": "string", "description": "ID of an execution to send"}, "channel": {"required": true, "type": "string", "description": "Channel to post to"}}, "tags": [], "description": "Post an execution result to stream for chatops", "enabled": true, "entry_point": "workflows/post_result.yaml", "notify": {}, "uid": "action:chatops:post_result", "pack": "chatops", "ref": "chatops.post_result", "id": "58b7089ac4da5f6aa779b849", "runner_type": "action-chain"}]
     # -------- end 37703888 response ------------
+
     +---------------------------------+---------+--------------------------------------------+
     | ref                             | pack    | description                                |
     +---------------------------------+---------+--------------------------------------------+
@@ -113,8 +161,7 @@ info:
     +---------------------------------+---------+--------------------------------------------+
     ```
 
-    **NOTE**: The URL displayed in the cURL commands above is directly accessing the API service on port 9101. If you are connecting to the ST2 API from a remote system, you should modify this to work with Nginx on port 443. In the above output, `http://127.0.0.1:9101/v1/actions?pack=chatops` would become `https://myhost.example.com/api/v1/actions?pack=chatops`.
-
+    **NOTE**: The URL displayed in the `curl` commands above is directly accessing the API service on port 9101. If you are connecting to the ST2 API from a remote system, you should modify this to work with Nginx on port 443. In the above output, `http://127.0.0.1:9101/v1/actions?pack=chatops` would become `https://myhost.example.com/api/v1/actions?pack=chatops`.
 
     ## Errors
 
@@ -136,15 +183,17 @@ info:
     {
         "conflict-id": "58e43d58c4da5f35c286a81f",
         "faultstring": "Tried to save duplicate unique keys (E11000 duplicate key error collection: st2.rule_d_b index: uid_1 dup key: { : \"rule:examples:sample_rule_with_timer\" })"
+    }
     ```
 
     `4xx` codes indicate a bad request, whereas `5xx` errors indicate a server-side problem with StackStorm.
 
     ## Support
 
-    Join our [Slack Community](https://stackstorm.com/community-signup) to get help from the engineering team and fellow users. You can also create issues against the main [StackStorm GitHub repo](https://github.com/StackStorm/st2/issues), or the [st2apidocs repo](https://github.com/StackStorm/st2apidocs) for documentation-specific issue.
+    Join our [Slack Community](https://stackstorm.com/community-signup) to get help from the engineering team and fellow users. You can also create issues against the main [StackStorm GitHub repo](https://github.com/StackStorm/st2/issues), or the [st2apidocs repo](https://github.com/StackStorm/st2apidocs) for documentation-specific issues.
 
     We also recommend reviewing the main [StackStorm documentation](https://docs.stackstorm.com/).
+    
 
 paths:
   /api/v1/:
@@ -172,7 +221,7 @@ paths:
   /api/v1/actions:
     get:
       operationId: st2api.controllers.v1.actions:actions_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.ACTION_LIST }}
+      x-permissions: 
       description: Returns a list of all actions.
       parameters:
         - name: exclude_attributes
@@ -356,7 +405,7 @@ paths:
   /api/v1/actions/views/overview:
     get:
       operationId: st2api.controllers.v1.actionviews:overview_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.ACTION_LIST }}
+      x-permissions: 
       description: Returns a list of all the actions with runner parameters included.
       parameters:
         - name: exclude_attributes
@@ -450,7 +499,7 @@ paths:
   /api/v1/actionalias:
     get:
       operationId: st2api.controllers.v1.actionalias:action_alias_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.ACTION_ALIAS_LIST }}
+      x-permissions: 
       description: |
           Get list of action-alias.
       parameters:
@@ -590,7 +639,7 @@ paths:
   /api/v1/actionalias/match:
     post:
       operationId: st2api.controllers.v1.actionalias:action_alias_controller.match
-      x-permissions: {{ PERMISSION_TYPE.ACTION_ALIAS_MATCH }}
+      x-permissions: 
       description: |
         Match actionalias based on format (representation or display).
       parameters:
@@ -615,7 +664,7 @@ paths:
   /api/v1/actionalias/help:
     get:
       operationId: st2api.controllers.v1.actionalias:action_alias_controller.help
-      x-permissions: {{ PERMISSION_TYPE.ACTION_ALIAS_HELP }}
+      x-permissions: 
       description: |
         Get available help strings for action aliases.
       parameters:
@@ -682,7 +731,7 @@ paths:
   /api/v1/executions:
     get:
       operationId: st2api.controllers.v1.actionexecutions:action_executions_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.EXECUTION_LIST }}
+      x-permissions: 
       x-log-result: false
       description: Returns a list of all executions.
       parameters:
@@ -765,17 +814,17 @@ paths:
           in: query
           description: Start timestamp filter
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
         - name: timestamp_lt
           in: query
           description: Start timestamp less than filter
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
         - name: timestamp_gt
           in: query
           description: Start timestamp greater than filter
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
       responses:
         '200':
           description: List of executions
@@ -1056,7 +1105,7 @@ paths:
   /api/v1/keys:
     get:
       operationId: st2api.controllers.v1.keyvalue:key_value_pair_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.KEY_VALUE_PAIR_LIST }}
+      x-permissions: 
       description: Returns a list of all key value pairs.
       parameters:
         - name: prefix
@@ -1224,7 +1273,7 @@ paths:
   /api/v1/packs:
     get:
       operationId: st2api.controllers.v1.packs:packs_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.PACK_LIST }}
+      x-permissions: 
       description: Get list of installed packs.
       parameters:
         - name: limit
@@ -1288,7 +1337,9 @@ paths:
         '200':
           description: Information about a pack.
           schema:
-            $ref: '#/definitions/PackView'
+            type: object
+            items:
+              $ref: '#/definitions/PackView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1299,7 +1350,7 @@ paths:
   /api/v1/packs/install:
     post:
       operationId: st2api.controllers.v1.packs:packs_controller.install.post
-      x-permissions: {{ PERMISSION_TYPE.PACK_INSTALL }}
+      x-permissions: 
       description: |
         Install new packs..
       parameters:
@@ -1324,7 +1375,7 @@ paths:
   /api/v1/packs/uninstall:
     post:
       operationId: st2api.controllers.v1.packs:packs_controller.uninstall.post
-      x-permissions: {{ PERMISSION_TYPE.PACK_UNINSTALL }}
+      x-permissions: 
       description: |
         Uninstall packs.
       parameters:
@@ -1349,7 +1400,7 @@ paths:
   /api/v1/packs/register:
     post:
       operationId: st2api.controllers.v1.packs:packs_controller.register.post
-      x-permissions: {{ PERMISSION_TYPE.PACK_REGISTER }}
+      x-permissions: 
       description: |
         Register pack(s): sync all file changes with DB.
       parameters:
@@ -1374,7 +1425,7 @@ paths:
   /api/v1/packs/index/search:
     post:
       operationId: st2api.controllers.v1.packs:packs_controller.index.search.post
-      x-permissions: {{ PERMISSION_TYPE.PACK_SEARCH }}
+      x-permissions: 
       description: |
         Search the index with a query or Get information about an available pack from the index.
       parameters:
@@ -1387,13 +1438,8 @@ paths:
         '200':
           description: Pack search results.
           schema:
-            type:
-              - array
-              - object
-            # Ideally, we should return array every time and when we request a pack, it should be an
-            # array of a single element. Currently it's not the case though so we have to fallback
-            # to broader kind of scheme. Fixing this would require breaking changes to this endpoint.
-            # $ref: '#/definitions/PacksList'
+            items:
+              - $ref: '#/definitions/PacksList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1406,13 +1452,15 @@ paths:
   /api/v1/packs/index/health:
     get:
       operationId: st2api.controllers.v1.packs:packs_controller.index.get
-      x-permissions: {{ PERMISSION_TYPE.PACK_VIEW_INDEX_HEALTH }}
+      x-permissions: 
       description: To get the state of all indexes used by your StackStorm instance.
       responses:
         '200':
           description: Index health.
           schema:
-            $ref: '#/definitions/PackIndex'
+            type: object
+            items:
+              $ref: '#/definitions/PackIndex'
           examples:
             application/json:
               ref: 'core.local'
@@ -1495,7 +1543,7 @@ paths:
   /api/v1/configs:
     get:
       operationId: st2api.controllers.v1.pack_configs:pack_configs_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.PACK_LIST }}
+      x-permissions: 
       description: Retrieve configs for all the packs.
       parameters:
         - name: limit
@@ -1557,7 +1605,9 @@ paths:
         '200':
           description: Config for a particular pack.
           schema:
-            $ref: '#/definitions/PackConfigView'
+            type: object
+            items:
+              $ref: '#/definitions/PackConfigView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1567,7 +1617,7 @@ paths:
             $ref: '#/definitions/Error'
     put:
       operationId: st2api.controllers.v1.pack_configs:pack_configs_controller.put
-      x-permissions: {{ PERMISSION_TYPE.PACK_CONFIG }}
+      x-permissions: 
       description: Create a new config for the action.
       parameters:
         - name: pack_ref
@@ -1584,7 +1634,9 @@ paths:
         '200':
           description: Config for a particular pack.
           schema:
-            $ref: '#/definitions/PackConfigCreate'
+            type: object
+            items:
+              $ref: '#/definitions/PackConfigCreate'
           examples:
             application/json:
               ref: 'core.local'
@@ -1595,7 +1647,7 @@ paths:
   /api/v1/config_schemas:
     get:
       operationId: st2api.controllers.v1.pack_config_schemas:pack_config_schema_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.PACK_LIST }}
+      x-permissions: 
       description: Retrieve config schema for all the packs.
       parameters:
         - name: limit
@@ -1657,7 +1709,9 @@ paths:
         '200':
           description: Config schema for a particular pack.
           schema:
-            $ref: '#/definitions/PackConfigView'
+            type: object
+            items:
+              $ref: '#/definitions/PackConfigView'
           examples:
             application/json:
               ref: 'core.local'
@@ -1729,7 +1783,9 @@ paths:
         '200':
           description: Specific policy type.
           schema:
-            $ref: '#/definitions/PolicyTypeList'
+            type: object
+            items:
+              $ref: '#/definitions/PolicyTypeList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1756,7 +1812,6 @@ paths:
         '200':
           description: Policy created successfully.
           schema:
-            type: array
             items:
               - $ref: '#/definitions/PolicyList'
           examples:
@@ -1782,7 +1837,8 @@ paths:
         '200':
           description: Policy created successfully.
           schema:
-            $ref: '#/definitions/PolicyList'
+            items:
+              - $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1806,7 +1862,8 @@ paths:
         '200':
           description: Policy found.
           schema:
-            $ref: '#/definitions/PolicyList'
+            items:
+              - $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1835,7 +1892,8 @@ paths:
         '200':
           description: Policy updated successfully.
           schema:
-            $ref: '#/definitions/PolicyList'
+            items:
+              - $ref: '#/definitions/PolicyList'
           examples:
             application/json:
               ref: 'core.webhook'
@@ -1979,7 +2037,7 @@ paths:
   /api/v1/rules:
     get:
       operationId: st2api.controllers.v1.rules:rule_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.RULE_LIST }}
+      x-permissions: 
       description: Returns a list of all rules.
       parameters:
         - name: exclude_attributes
@@ -2152,7 +2210,7 @@ paths:
   /api/v1/rules/views:
     get:
       operationId: st2api.controllers.v1.ruleviews:rule_view_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.RULE_LIST }}
+      x-permissions: 
       description: Returns a list of all rules.
       parameters:
         - name: exclude_attributes
@@ -2276,7 +2334,7 @@ paths:
   /api/v1/runnertypes:
     get:
       operationId: st2api.controllers.v1.runnertypes:runner_types_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.RUNNER_LIST }}
+      x-permissions: 
       description: Returns a list of all runner types.
       parameters:
         - name: exclude_attributes
@@ -2392,7 +2450,7 @@ paths:
   /api/v1/sensortypes:
     get:
       operationId: st2api.controllers.v1.sensors:sensor_type_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.SENSOR_LIST }}
+      x-permissions: 
       description: Returns a list of all sensor types.
       parameters:
         - name: exclude_attributes
@@ -2512,7 +2570,7 @@ paths:
   /api/v1/apikeys:
     get:
       operationId: st2api.controllers.v1.auth:api_key_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.API_KEY_LIST }}
+      x-permissions: 
       description: Returns a list of all actions.
       parameters:
         - name: show_secrets
@@ -2658,13 +2716,13 @@ paths:
   /api/v1/ruleenforcements:
     get:
       operationId: st2api.controllers.v1.rule_enforcements:rule_enforcements_controller.get_all
-      x-permissions: {{ PERMISSION_TYPE.RULE_ENFORCEMENT_LIST }}
+      x-permissions: 
       description: Returns a list of all the rule enforcements.
       parameters:
         - name: limit
           in: query
           description: List N most recent rule enforcements.
-          type: integer
+          type: string
           default: 50
         - name: offset
           in: query
@@ -2708,13 +2766,13 @@ paths:
           description: |
               Only return enforcements with enforced_at greater than the one provided. Use time in the format.
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
         - name: enforced_at_lt
           in: query
           description: |
               Only return enforcements with enforced_at lower than the one provided. Use time in the format.
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
       responses:
         '200':
           description: List of rule enforcements
@@ -2739,7 +2797,6 @@ paths:
           in: path
           description: Entity id
           type: string
-          required: true
       x-parameters:
         - name: user
           in: context
@@ -2749,7 +2806,9 @@ paths:
         '200':
           description: Rule Enforcements based on ref or id
           schema:
-            $ref: '#/definitions/RuleEnforcementsList'
+            type: object
+            items:
+              $ref: '#/definitions/RuleEnforcementsList'
           examples:
             application/json:
               ref: 'core.local'
@@ -2791,12 +2850,13 @@ paths:
           in: path
           description: entities id
           type: string
-          required: true
       responses:
         '200':
           description: Trace
           schema:
-            $ref: '#/definitions/TimersList'
+            type: object
+            items:
+              $ref: '#/definitions/TimersList'
           examples:
             application/json:
               ref: 'core.local'
@@ -2886,12 +2946,13 @@ paths:
           in: path
           description: entities id
           type: string
-          required: true
       responses:
         '200':
           description: Trace
           schema:
-            $ref: '#/definitions/TracesList'
+            type: object
+            items:
+              $ref: '#/definitions/TracesList'
           examples:
             application/json:
               ref: 'core.local'
@@ -3161,12 +3222,12 @@ paths:
           in: query
           description: Start timestamp less than filter
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
         - name: timestamp_gt
           in: query
           description: Start timestamp greater than filter
           type: string
-          pattern: {{ ISO8601_UTC_REGEX }}
+          pattern: 
       responses:
         '200':
           description: List of trigger instances
@@ -3500,7 +3561,7 @@ definitions:
           pack:
             type: string
             description: The content pack this action belongs to.
-            default: '{{ DEFAULT_PACK_NAME }}'
+            default: ''
       - $ref: '#/definitions/Action'
       - $ref: '#/definitions/DataFilesSubSchema'
   ActionUpdateRequest:
@@ -3607,15 +3668,15 @@ definitions:
       status:
         description: The current status of the action execution.
         type: string
-        enum: {{ LIVEACTION_STATUSES }}
+        enum: 
       start_timestamp:
         description: The start time when the action is executed.
         type: string
-        pattern: {{ ISO8601_UTC_REGEX }}
+        pattern: 
       end_timestamp:
         description: The timestamp when the action has finished.
         type: string
-        pattern: {{ ISO8601_UTC_REGEX }}
+        pattern: 
       elapsed_seconds:
         description: Time duration in seconds taken for completion of this execution.
         type: number
@@ -3663,10 +3724,10 @@ definitions:
           properties:
             timestamp:
               type: string
-              pattern: {{ ISO8601_UTC_REGEX }}
+              pattern: 
             status:
               type: string
-              enum: {{ LIVEACTION_STATUSES }}
+              enum: 
     required:
       - id
     additionalProperties: False
@@ -3832,22 +3893,24 @@ definitions:
       indexes:
         description: Index details.
         type: object
-        properties:
-          count:
-            description: Number of index.
-            type: integer
-          errors:
-            description: Errors.
-            type: object
-          invalid:
-            description: Invalid.
-            type: integer
-          status:
-            description: Status of the index.
-            type: array
-          valid:
-            description: Valid.
-            type: integer
+        items:
+          type: object
+          properties:
+            count:
+              description: Number of index.
+              type: integer
+            errors:
+              description: Errors.
+              type: object
+            invalid:
+              description: Invalid.
+              type: integer
+            status:
+              description: Status of the index.
+              type: array
+            valid:
+              description: Valid.
+              type: integer
       packs:
         description: Number of packs in the index.
         type: object
@@ -3907,15 +3970,15 @@ definitions:
       status:
         description: The current status of the action execution.
         type: string
-        enum: {{ LIVEACTION_STATUSES }}
+        enum: 
       start_timestamp:
         description: The start time when the action is executed.
         type: string
-        pattern: {{ ISO8601_UTC_REGEX }}
+        pattern: 
       end_timestamp:
         description: The timestamp when the action has finished.
         type: string
-        pattern: {{ ISO8601_UTC_REGEX }}
+        pattern: 
       action:
         description: Reference to the action to be executed.
         type: string
