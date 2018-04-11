@@ -18,6 +18,7 @@ jobs:
             echo "Here are the env vars"
             echo $ST2_BRANCH
             echo $CIRCLE_BRANCH
+            echo ${CIRCLE_BUILD_NUM}
       - run:
           name: Fetch latest StackStorm OpenAPI spec
           command: |
