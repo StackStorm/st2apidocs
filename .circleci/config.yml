@@ -11,7 +11,6 @@ jobs:
           command: |
             if [ -z "$ST2_BRANCH" ]; then
               echo 'export ST2_BRANCH="${CIRCLE_BRANCH}"' >> $BASH_ENV
-              echo $ST2_BRANCH
             fi
       - run:
           name: Let's print the env vars
@@ -38,7 +37,7 @@ jobs:
       - run:
           name: Generate API documentation
           command: |
-            if [ "${ST2_BRANCH}" ~= ^v[0-9]+\.[0-9]+$ ]; then
+            if [[ "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then
               st2apidocgen --render --output
             elif [ "${ST2_BRANCH}" == "master" ]; then
               st2apidocgen --render /master --output
