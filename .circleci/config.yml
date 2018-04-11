@@ -10,7 +10,8 @@ jobs:
           name: If ST2_BRANCH is not set, set it to CIRCLE_BRANCH
           command: |
             if [ -z "$ST2_BRANCH" ]; then
-              export ST2_BRANCH="${CIRCLE_BRANCH}"
+              echo 'export ST2_BRANCH="${CIRCLE_BRANCH}"' >> $BASH_ENV
+              echo $ST2_BRANCH
             fi
       - run:
           name: Let's print the env vars
