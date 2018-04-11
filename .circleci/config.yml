@@ -43,6 +43,7 @@ jobs:
             elif [ "${ST2_BRANCH}" == "master" ]; then
               st2apidocgen --render /master --output
             else
+              echo CIRCLE BUILD NUM ${CIRCLE_BUILD_NUM}
               st2apidocgen --render /${CIRCLE_BUILD_NUM} --output
             fi
       - store_artifacts:
