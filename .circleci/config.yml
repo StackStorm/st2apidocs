@@ -22,6 +22,7 @@ jobs:
       - run:
           name: Fetch latest StackStorm OpenAPI spec
           command: |
+            echo ST2_BRANCH ${ST2_BRANCH}
             curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml
       - run:
           name: Install Dependencies
