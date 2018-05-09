@@ -41,7 +41,7 @@ jobs:
             if [[ "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then
               st2apidocgen --render --output
             elif [ "${ST2_BRANCH}" == "master" ]; then
-              st2apidocgen --render /master --output
+              st2apidocgen --render --output
             else
               st2apidocgen --render /${CIRCLE_BUILD_NUM} --output
             fi
