@@ -63,6 +63,7 @@ jobs:
               aws cloudfront create-invalidation --distribution-id=${DISTRIBUTION_ID} --paths="/*"
             elif [ "${ST2_BRANCH}" == "master" ]; then
               aws s3 sync build/ s3://api-unstable.stackstorm.com/master --region ${REGION} --delete
+              aws cloudfront create-invalidation --distribution-id=${DISTRIBUTION_ID_UNSTABLE} --paths="/*"
             else
               aws s3 sync build/ s3://api-staging.stackstorm.com/${CIRCLE_BUILD_NUM} --region ${REGION}
             fi
