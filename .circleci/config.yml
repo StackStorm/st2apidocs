@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:7.7.3
+      - image: node:10
     working_directory: ~/st2apidocs
     steps:
       - checkout
