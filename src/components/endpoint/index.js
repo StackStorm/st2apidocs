@@ -1,3 +1,5 @@
+/*eslint brace-style: ["error", "stroustrup", { "allowSingleLine": true }]*/
+/* eslint react/jsx-key: 0 */
 import _ from 'lodash';
 import React from 'react';
 
@@ -113,7 +115,7 @@ class ParameterType extends BaseComponent {
         {
           [].concat(type)
             .map(t => this.renderChild(t))
-            .reduce((acc, e, i, arr) => acc.concat(i === arr.length - 1 ? [e] : [e, ', ']), [])
+            .reduce((acc, e, i, arr) => acc.concat(i === arr.length - 1 ? [ e ] : [ e, ', ' ]), [])
         }
       </div>
     );
@@ -164,7 +166,7 @@ class RequestBody extends BaseComponent {
 
 class Responses extends BaseComponent {
   defaultSchema = {
-    type: 'null'
+    type: 'null',
   }
 
   state = {}

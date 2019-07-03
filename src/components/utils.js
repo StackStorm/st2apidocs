@@ -1,23 +1,23 @@
 import _ from 'lodash';
 
 export function makeEntityLink({ service, version, entity }) {
-  let path = [''];
+  let path = [ '' ];
 
   if (entity) {
-    path = [entity].concat(path);
+    path = [ entity ].concat(path);
   }
 
   return `/${service}/${version}/${path.join('/')}`;
 }
 
 export function makeAnchor(props) {
-  const [, instanceMethod] = props.model.operationId.split(':');
+  const [ , instanceMethod ] = props.model.operationId.split(':');
   return `/${instanceMethod}`;
 }
 
 function customizer(objValue, srcValue) {
   if (_.isArray(objValue)) {
-    return [...new Set(objValue.concat(srcValue))];
+    return [ ...new Set(objValue.concat(srcValue)) ];
   }
   return undefined;
 }
@@ -39,6 +39,7 @@ export function traverseSchema(model, prefix = []) {
   const { properties = items.properties || {}, required = items.required || [] } = model;
 
   return _.flatMap(properties, (m, name) => {
+    // eslint-disable-next-line no-bitwise
     const extendedModel = _.assign({}, m, { name, required: !!~required.indexOf(name) });
     const key = prefix.concat(name);
 
@@ -46,7 +47,7 @@ export function traverseSchema(model, prefix = []) {
       return [{
         key: key.join('.'),
         level: key.length,
-        model: extendedModel
+        model: extendedModel,
       }].concat(traverseSchema(m, key));
     }
 
@@ -54,14 +55,14 @@ export function traverseSchema(model, prefix = []) {
       return [{
         key: key.join('.'),
         level: key.length,
-        model: extendedModel
+        model: extendedModel,
       }].concat(traverseSchema(m, key));
     }
 
     return {
       key: key.join('.'),
       level: key.length,
-      model: extendedModel
+      model: extendedModel,
     };
   });
 }
