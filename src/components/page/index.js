@@ -16,7 +16,9 @@ export default class Page extends BaseComponent {
 
     const props = {
       key: `${method} ${action}`,
-      ref: (c) => { this.hashes[`#${makeAnchor({ model })}`] = c; },
+      ref: (c) => {
+        this.hashes[`#${makeAnchor({ model })}`] = c;
+      },
       service,
       version,
       entity,
@@ -35,7 +37,9 @@ export default class Page extends BaseComponent {
       <div className={style.page}>
         <header
           className={style.page.header}
-          ref={(c) => { this.hashes[''] = c; }}
+          ref={(c) => {
+            this.hashes[''] = c;
+          }}
         >
           <span className={style.page.header.version}>{ version }</span>
           <span className={style.page.header.entity}>{ entity || '/' }</span>
@@ -67,7 +71,9 @@ export default class Page extends BaseComponent {
   componentDidUpdate(prevProps) {
     const { hash } = this.props;
 
-    if (hash === prevProps.hash) { return; }
+    if (hash === prevProps.hash) {
+      return;
+    }
 
     const element = this.hashes[hash];
 

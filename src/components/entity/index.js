@@ -23,6 +23,7 @@ export default class Entity extends BaseComponent {
       model,
     };
 
+    // eslint-disable-next-line no-bitwise
     if (filter && !~props.key.indexOf(filter)) {
       return false;
     }

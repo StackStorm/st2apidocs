@@ -47,7 +47,7 @@ class ApiDocs extends BaseComponent {
 
     const { services } = this.props.model;
 
-    const [service, version = '', entity = ''] = (match.params.url || '').split('/');
+    const [ service, version = '', entity = '' ] = (match.params.url || '').split('/');
     const { hash } = location;
 
     if (service === '' || service === 'index.html') {
@@ -111,14 +111,14 @@ Promise.resolve()
   .then(spec => $RefParser.dereference(spec))
   .then(fullSpec => Object.keys(fullSpec.paths)
     .reduce((acc, url) => {
-      const [, service, version, entity, ...rest] = url.split('/');
+      const [ , service, version, entity, ...rest ] = url.split('/');
 
-      _.set(acc.services, [service, version, entity, rest.join('/')], fullSpec.paths[url]);
+      _.set(acc.services, [ service, version, entity, rest.join('/') ], fullSpec.paths[url]);
 
       return acc;
     }, {
       info: fullSpec.info,
-      services: {}
+      services: {},
     })
   )
   .then((model) => {
