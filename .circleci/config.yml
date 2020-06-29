@@ -34,7 +34,7 @@ jobs:
           command: npm test
       - run:
           name: Install doc generator
-          command: npm install -g https://github.com/StackStorm/st2apidocgen
+          command: npm install -g https://github.com/Sheshagiri/st2apidocgen
       - run:
           name: Generate API documentation
           command: |
