@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10
+      - image: node:10
     working_directory: ~/st2apidocs
     steps:
       - checkout
@@ -34,7 +34,7 @@ jobs:
           command: npm test
       - run:
           name: Install doc generator
-          command: sudo npm install -g https://github.com/Sheshagiri/st2apidocgen#shesh/fix-babel-issue
+          command: npm install -g https://github.com/Sheshagiri/st2apidocgen#shesh/fix-babel-issue
       - run:
           name: Generate API documentation
           command: |
