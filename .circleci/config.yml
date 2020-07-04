@@ -23,6 +23,11 @@ jobs:
           name: Fetch latest StackStorm OpenAPI spec
           command: |
             curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml
+	    statuscode=$(curl --silent --write-out "%{http_code}" -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml)
+	          if test $statuscode -ne 200; then
+              echo 'openapi.yaml is not available in https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml, get the openapi.yaml from master branch'
+              curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/master/st2common/st2common/openapi.yaml
+            fi
       - run:
           name: Install Dependencies
           command: npm install
@@ -38,8 +43,13 @@ jobs:
       - run:
           name: Generate API documentation
           command: |
-            ls -ltr 
-            st2apidocgen --render --ouput
+            if [[ "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then	            ls -ltr 
+              st2apidocgen --render --output	            st2apidocgen --render --ouput
+            elif [ "${ST2_BRANCH}" == "master" ]; then	
+              st2apidocgen --render --output	
+            else	
+              st2apidocgen --render /${CIRCLE_BUILD_NUM} --output	
+            fi
       - store_artifacts:
           path: ~/st2apidocs/build
           destination: build
