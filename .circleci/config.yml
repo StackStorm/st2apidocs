@@ -22,7 +22,11 @@ jobs:
       - run:
           name: Fetch latest StackStorm OpenAPI spec
           command: |
-            curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml
+            statuscode=$(curl --silent --write-out "%{http_code}" -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml)
+            if test $statuscode -ne 200; then
+              echo 'openapi.yaml is not available in https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml, get the openapi.yaml from master branch'
+              curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/master/st2common/st2common/openapi.yaml
+            fi
       - run:
           name: Install Dependencies
           command: npm install
@@ -34,7 +38,7 @@ jobs:
           command: npm test
       - run:
           name: Install doc generator
-          command: npm install -g https://github.com/StackStorm/st2apidocgen
+          command: npm install -g https://github.com/Sheshagiri/st2apidocgen#shesh/fix-babel-issue
       - run:
           name: Generate API documentation
           command: |
@@ -57,6 +61,7 @@ jobs:
       - deploy:
           name: Deploying to S3
           command: |
+            echo 'sync to aws $REGION region.'
             find ~/st2apidocs/build | sed 's|[^/]*/|  |g'
             if [[  "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then
               aws s3 sync build/ s3://api.stackstorm.com/ --region ${REGION} --delete
