@@ -42,12 +42,12 @@ jobs:
       - run:
           name: Generate API documentation
           command: |
-            if [[ "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then	            ls -ltr 
-              st2apidocgen --render --output	            st2apidocgen --render --ouput
-            elif [ "${ST2_BRANCH}" == "master" ]; then	
-              st2apidocgen --render --output	
-            else	
-              st2apidocgen --render /${CIRCLE_BUILD_NUM} --output	
+            if [[ "${ST2_BRANCH}" =~ ^v[0-9]+\.[0-9]+$ ]]; then
+              st2apidocgen --render --output
+            elif [ "${ST2_BRANCH}" == "master" ]; then
+              st2apidocgen --render --output
+            else
+              st2apidocgen --render /${CIRCLE_BUILD_NUM} --output
             fi
       - store_artifacts:
           path: ~/st2apidocs/build
