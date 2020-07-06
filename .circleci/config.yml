@@ -25,7 +25,7 @@ jobs:
             statuscode=$(curl --silent --write-out "%{http_code}" -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml)
             if test $statuscode -ne 200; then
               echo 'openapi.yaml is not available in https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml, get the openapi.yaml from master branch'
-              curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/${ST2_BRANCH}/st2common/st2common/openapi.yaml
+              curl -Ss -q -o openapi.yaml https://raw.githubusercontent.com/StackStorm/st2/master/st2common/st2common/openapi.yaml
             fi
       - run:
           name: Install Dependencies
