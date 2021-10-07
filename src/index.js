@@ -107,7 +107,7 @@ class ApiDocs extends BaseComponent {
 Promise.resolve()
   .then(() => fetch('openapi.yaml'))
   .then(resp => resp.text())
-  .then(yamlString => yaml.safeLoad(yamlString))
+  .then(yamlString => yaml.load(yamlString))
   .then(spec => $RefParser.dereference(spec))
   .then(fullSpec => Object.keys(fullSpec.paths)
     .reduce((acc, url) => {
